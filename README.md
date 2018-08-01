@@ -95,9 +95,9 @@ use micetm\timeline\Timeline;
 echo Timeline::widget([
     'items' => $dataProvider->getModels(),
     'eventIcons' => [
-        'update' => 'fa-pencil bg-orange',
-        'add' => 'fa-pencil bg-orange',
-        'create' => 'fa-check bg-green',
+        'update' => 'fa fa-pencil bg-orange',
+        'add' => 'fa fa-pencil bg-orange',
+        'create' => 'glyphicon glyphicon-star bg-green',
     ]
 ]); ?>
 

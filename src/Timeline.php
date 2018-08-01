@@ -18,10 +18,10 @@ class Timeline extends Widget
     public $endMacros = '}';
 
     protected $defaultIcons = [
-        'update' => 'fa-pencil bg-orange',
-        'create' => 'fa-check bg-green',
-        'delete' => 'fa-trash bg-red',
-        'default' => 'fa-check'
+        'update' => 'fa fa-pencil bg-orange',
+        'create' => 'fa fa-check bg-green',
+        'delete' => 'fa fa-trash bg-red',
+        'default' => 'fa fa-check'
     ];
 
     /**
@@ -73,7 +73,7 @@ class Timeline extends Widget
             'i',
             '',
             [
-                'class' => 'fa ' . $this->eventIcons[$action] ?? $this->eventIcons['default']
+                'class' => $this->eventIcons[$action] ?? $this->eventIcons['default']
             ]
         );
     }
