@@ -17,9 +17,7 @@ class Timeline extends Widget
 
     public $endMacros = '}';
 
-    public $timelineBody = null;
-
-    protected $defaultTimelineBody = 'timeline_body';
+    public $bodyLayout = 'timeline_body';
 
     protected $defaultIcons = [
         'update' => 'fa fa-pencil bg-orange',
@@ -34,7 +32,6 @@ class Timeline extends Widget
     public function run()
     {
         $this->eventIcons = array_merge($this->defaultIcons, $this->eventIcons);
-        $this->timelineBody = $this->timelineBody ?? $this->defaultTimelineBody;
         return $this->renderItems();
     }
 
@@ -104,7 +101,7 @@ class Timeline extends Widget
 
     protected function constructBody($body)
     {
-        return $this->render($this->timelineBody, ['items' => (array)$body]);
+        return $this->render($this->bodyLayout, ['items' => (array)$body]);
     }
 
     protected function replaceMacros($template, $replacement)
