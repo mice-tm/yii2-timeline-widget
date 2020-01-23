@@ -1,0 +1,11 @@
+.diff-row {
+    margin-bottom: 7px;
+}
+
+.diff-row .diff-label {
+    font-weight: bold;
+}
+
+.timeline .fa-repeat {
+    transform: scaleX(-1);
+}

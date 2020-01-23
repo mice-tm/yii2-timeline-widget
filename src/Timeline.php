@@ -17,6 +17,21 @@ class Timeline extends Widget
 
     public $endMacros = '}';
 
+    /**
+     * Path to view for rendering $model->body
+     *
+     * The widget includes a 'timeline_body' view that displays an array of the following structure
+     * [
+     *     'key' => [
+     *         'old' => 'oldValue',
+     *         'new' => 'newValue'
+     *     ]
+     * ]
+     *
+     * @var string | null
+     */
+    public $bodyLayout = null;
+
     protected $defaultIcons = [
         'update' => 'fa fa-pencil bg-orange',
         'create' => 'fa fa-check bg-green',
@@ -50,13 +65,15 @@ class Timeline extends Widget
 
             $nodes[] = $this->constructIcon($model->action);
             $timelineItem = [];
-            $timelineItem[] = $this->construnctTime($model->log_date);
+            $timelineItem[] = $this->constructTime($model->log_date);
 
             if ($model->title) {
                 $timelineItem[] = $this->constructHeader($model->title, $model->macros);
             }
             if ($model->body) {
-                $timelineItem[] = $this->constructBody($model->body, $model->macros);
+                $timelineItem[] = $this->bodyLayout
+                    ? $this->constructBodyLayout($model->body)
+                    : $this->constructBody($model->body, $model->macros);
             }
             $nodes[] = Html::tag('div', implode("\n", $timelineItem), ['class' => 'timeline-item']);
             $lis[] = Html::tag('li', implode("\n", $nodes));
@@ -64,7 +81,6 @@ class Timeline extends Widget
         $lis[] = Html::tag('li', Html::tag('i', '', ["class" => "fa fa-clock-o"]));
         return Html::tag('ul', implode("\n", $lis), ['class' => "timeline"]);
     }
-
 
 
     protected function constructIcon($action)
@@ -78,7 +94,7 @@ class Timeline extends Widget
         );
     }
 
-    protected function construnctTime($time)
+    protected function constructTime($time)
     {
         $nodes = [];
         $nodes[] = Html::tag('i', '', ['class' => 'fa fa-clock-o']);
@@ -100,6 +116,11 @@ class Timeline extends Widget
     protected function constructBody($body, $macros)
     {
         return Html::tag('h3', $this->replaceMacros($body, $macros), ['class' => 'timeline-header']);
+    }
+
+    protected function constructBodyLayout($body)
+    {
+        return $this->render($this->bodyLayout, ['items' => (array)$body]);
     }
 
     protected function replaceMacros($template, $replacement)
