@@ -17,6 +17,10 @@ class Timeline extends Widget
 
     public $endMacros = '}';
 
+    public $timelineBody = null;
+
+    protected $defaultTimelineBody = 'timeline_body';
+
     protected $defaultIcons = [
         'update' => 'fa fa-pencil bg-orange',
         'create' => 'fa fa-check bg-green',
@@ -30,6 +34,7 @@ class Timeline extends Widget
     public function run()
     {
         $this->eventIcons = array_merge($this->defaultIcons, $this->eventIcons);
+        $this->timelineBody = $this->timelineBody ?? $this->defaultTimelineBody;
         return $this->renderItems();
     }
 
@@ -97,9 +102,9 @@ class Timeline extends Widget
         return Html::tag('h3', $this->replaceMacros($title, $macros), ['class' => 'timeline-header']);
     }
 
-    protected function constructBody($body, $macros)
+    protected function constructBody($body)
     {
-        return Html::tag('h3', $this->replaceMacros($body, $macros), ['class' => 'timeline-header']);
+        return $this->render($this->timelineBody, ['items' => (array)$body]);
     }
 
     protected function replaceMacros($template, $replacement)
