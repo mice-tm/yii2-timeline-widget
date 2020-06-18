@@ -48,4 +48,17 @@ class LogModel extends Model
             'log_date' => 'Date',
         ];
     }
+    
+    public function getMacros()
+    {
+        return $this->macros;
+    }
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    public function getBody()
+    {
+        return $this->body;
+    }
 }

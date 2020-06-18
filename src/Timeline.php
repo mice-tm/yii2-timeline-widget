@@ -68,12 +68,12 @@ class Timeline extends Widget
             $timelineItem[] = $this->constructTime($model->log_date);
 
             if ($model->title) {
-                $timelineItem[] = $this->constructHeader($model->title, $model->macros);
+                $timelineItem[] = $this->constructHeader($model);
             }
             if ($model->body) {
                 $timelineItem[] = $this->bodyLayout
                     ? $this->constructBodyLayout($model->body)
-                    : $this->constructBody($model->body, $model->macros);
+                    : $this->constructBody($model);
             }
             $nodes[] = Html::tag('div', implode("\n", $timelineItem), ['class' => 'timeline-item']);
             $lis[] = Html::tag('li', implode("\n", $nodes));
@@ -102,20 +102,21 @@ class Timeline extends Widget
         return Html::tag('span', implode("\n", $nodes), ['class' => 'time']);
     }
 
-    protected function constructHeader($title, $macros)
+    protected function constructHeader($model)
     {
+        $macros = $this->getMacros($model);
         if (isset($macros['admin_name'])) {
             $macros['admin_name'] = Html::a(
                 $macros['admin_name'],
                 ['/user/view', 'id' => $macros['admin_id']]
             );
         }
-        return Html::tag('h3', $this->replaceMacros($title, $macros), ['class' => 'timeline-header']);
+        return Html::tag('h3', $this->replaceMacros($model->title, $macros), ['class' => 'timeline-header']);
     }
 
-    protected function constructBody($body, $macros)
+    protected function constructBody($model)
     {
-        return Html::tag('h3', $this->replaceMacros($body, $macros), ['class' => 'timeline-header']);
+        return Html::tag('h3', $this->replaceMacros($model->body, $this->getMacros($model)), ['class' => 'timeline-header']);
     }
 
     protected function constructBodyLayout($body)
@@ -126,5 +127,10 @@ class Timeline extends Widget
     protected function replaceMacros($template, $replacement)
     {
         return \Yii::t('timeline', $template, $replacement);
+    }
+    
+    protected function getMacros($model)
+    {
+        return method_exists($model, 'getMacros') ? $model->getMacros() : $model->macros;
     }
 }
