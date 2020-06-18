@@ -72,7 +72,7 @@ class Timeline extends Widget
             }
             if ($model->body) {
                 $timelineItem[] = $this->bodyLayout
-                    ? $this->constructBodyLayout($model->body)
+                    ? $this->constructBodyLayout($model)
                     : $this->constructBody($model);
             }
             $nodes[] = Html::tag('div', implode("\n", $timelineItem), ['class' => 'timeline-item']);
@@ -119,9 +119,9 @@ class Timeline extends Widget
         return Html::tag('h3', $this->replaceMacros($model->body, $this->getMacros($model)), ['class' => 'timeline-header']);
     }
 
-    protected function constructBodyLayout($body)
+    protected function constructBodyLayout($model)
     {
-        return $this->render($this->bodyLayout, ['items' => (array)$body]);
+        return $this->render($this->bodyLayout, ['items' => $this->getBody($model)]);
     }
 
     protected function replaceMacros($template, $replacement)
@@ -132,5 +132,10 @@ class Timeline extends Widget
     protected function getMacros($model)
     {
         return method_exists($model, 'getMacros') ? $model->getMacros() : $model->macros;
+    }
+    
+    protected function getBody($model)
+    {
+        return method_exists($model, 'getBody') ? $model->getBody() : $model->body;
     }
 }
