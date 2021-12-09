@@ -108,7 +108,7 @@ class Timeline extends Widget
         if (isset($macros['admin_name'])) {
             $macros['admin_name'] = Html::a(
                 $macros['admin_name'],
-                ['/user/view', 'id' => $macros['admin_id']]
+                ['/user/view', 'id' => $macros['admin_id'] ?? '']
             );
         }
         return Html::tag('h3', $this->replaceMacros($model->title, $macros), ['class' => 'timeline-header']);
@@ -128,12 +128,12 @@ class Timeline extends Widget
     {
         return \Yii::t('timeline', $template, $replacement);
     }
-    
+
     protected function getMacros($model)
     {
         return method_exists($model, 'getMacros') ? $model->getMacros() : $model->macros;
     }
-    
+
     protected function getBody($model)
     {
         return method_exists($model, 'getBody') ? $model->getBody() : $model->body;
